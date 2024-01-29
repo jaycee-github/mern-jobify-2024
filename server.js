@@ -43,9 +43,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Second argument = Route Controller
-app.get("/", (req, res) => {
-    res.send("I LOVE YOU SO MUCH, BABY JENJEN KO!!!! <3");
-});
+// app.get("/", (req, res) => {
+//     res.send("I LOVE YOU SO MUCH, BABY JENJEN KO!!!! <3");
+// });
 
 app.get("/api/v1/test", (req, res) => {
     res.json({ msg: "test route" });
