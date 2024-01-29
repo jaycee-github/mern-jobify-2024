@@ -8,6 +8,8 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
 
 // ROUTERS
 import jobRouter from "./routes/jobRouter.js";
@@ -41,15 +43,17 @@ app.use(express.static(path.resolve(__dirname, "./client/dist")));
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
+app.use(mongoSanitize());
 
 // Second argument = Route Controller
-app.get("/", (req, res) => {
-    res.send("I LOVE YOU SO MUCH, BABY JENJEN KO!!!! <3");
-});
+// app.get("/", (req, res) => {
+//     res.send("I LOVE YOU SO MUCH, BABY JENJEN KO!!!! <3");
+// });
 
-app.get("/api/v1/test", (req, res) => {
-    res.json({ msg: "test route" });
-});
+// app.get("/api/v1/test", (req, res) => {
+//     res.json({ msg: "test route" });
+// });
 
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);

@@ -10,32 +10,35 @@ import { FormRow, Logo, SubmitBtn } from "../components";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 
-export const action = async ({ request }) => {
-    const formData = await request.formData();
-    const data = Object.fromEntries(formData);
+export const action =
+    (queryClient) =>
+    async ({ request }) => {
+        const formData = await request.formData();
+        const data = Object.fromEntries(formData);
 
-    // const errors = {
-    // 	message: "",
-    // };
+        // const errors = {
+        // 	message: "",
+        // };
 
-    // if (data.password.length < 3) {
-    // 	errors.message = "password too short";
-    // 	return errors;
-    // }
+        // if (data.password.length < 3) {
+        // 	errors.message = "password too short";
+        // 	return errors;
+        // }
 
-    // console.log(errors);
+        // console.log(errors);
 
-    try {
-        await customFetch.post("/auth/login", data);
-        toast.success("Logged-in Successfully!");
-        return redirect("/dashboard");
-    } catch (error) {
-        toast.error(error?.response?.data?.message);
-        return error;
-        // errors.message = error?.response?.data?.message;
-        // return errors;
-    }
-};
+        try {
+            await customFetch.post("/auth/login", data);
+            queryClient.invalidateQueries();
+            toast.success("Logged-in Successfully!");
+            return redirect("/dashboard");
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            return error;
+            // errors.message = error?.response?.data?.message;
+            // return errors;
+        }
+    };
 
 const Login = () => {
     // const errors = useActionData();

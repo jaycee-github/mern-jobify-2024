@@ -5,24 +5,29 @@ import { Form } from "react-router-dom";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 
-export const action = async ({ request }) => {
-    const formData = await request.formData();
-    const file = formData.get("avatar");
+export const action =
+    (queryClient) =>
+    async ({ request }) => {
+        const formData = await request.formData();
+        const file = formData.get("avatar");
 
-    if (file && file.size > 500000) {
-        toast.error("Image size too large");
-        return null;
-    }
+        if (file && file.size > 500000) {
+            toast.error("Image size too large");
+            return null;
+        }
 
-    try {
-        await customFetch.patch("/users/update-user", formData);
-        toast.success("Profile updated successfully");
-    } catch (error) {
-        toast.error(error?.response?.data?.message);
-    }
+        try {
+            await customFetch.patch("/users/update-user", formData);
+            toast.success("Profile updated successfully");
+            queryClient.invalidateQueries(["user"]);
+            return redirect("/");
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            return null;
+        }
 
-    return null;
-};
+        // return null;
+    };
 
 const Profile = () => {
     const { user } = useOutletContext();
